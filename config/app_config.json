@@ -1,0 +1,35 @@
+{
+    "database": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "password": "123456",
+        "schema": "testdb",
+        "port": 3306,
+        "recentLimit": 50,
+        "retrySeconds": 5
+    },
+    "sensor": {
+        "endpoint": "192.168.88.17",
+        "port": 502,
+        "retrySeconds": 5,
+        "registers": 6
+    },
+    "publisher": {
+        "bindAddress": "0.0.0.0",
+        "port": 5555,
+        "workerThreads": 4,
+        "maxConnections": 200
+    },
+    "video": {
+        "port": 6000
+    },
+    "health": {
+        "statusFile": "artifacts/health_status.json",
+        "intervalSeconds": 10
+    },
+    "pipeline": {
+        "realtimeSeconds": 5,
+        "historicalSeconds": 60,
+        "cacheSize": 120
+    }
+}
