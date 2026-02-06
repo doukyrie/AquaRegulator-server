@@ -17,48 +17,55 @@ Configuration buildDefaultConfig() {
 
 } // namespace
 
+// 构造函数：初始化时加载配置
 ConfigurationManager::ConfigurationManager(std::string path)
-    : config_(buildDefaultConfig())
+    : config_(buildDefaultConfig()) // 默认值
     , path_(std::move(path)) {
-    loadFromDisk();
+    loadFromDisk(); // 从文件加载（覆盖默认值）
 }
 
+//若文件被改动过则重新加载
 bool ConfigurationManager::reloadIfChanged() {
     std::error_code ec;
-    auto current = std::filesystem::last_write_time(path_, ec);
-    if (ec) {
+    auto current = std::filesystem::last_write_time(path_, ec); // 获取文件修改时间
+    if (ec) {   // 获取修改时间出错（比如文件不存在）
         return false;
     }
-    if (current != lastWriteTime_) {
-        loadFromDisk();
+    if (current != lastWriteTime_) {    //// 文件修改时间不同（说明文件被改动了）
+        loadFromDisk(); //重新加载config结构体
         lastWriteTime_ = current;
         return true;
     }
     return false;
 }
 
+// 从磁盘加载配置文件
 void ConfigurationManager::loadFromDisk() {
-    std::ifstream in(path_);
-    if (!in.good()) {
+    std::ifstream in(path_);    //定义文件输入流（从文件读入）
+
+    if (!in.good()) {   // 文件不存在，则创建目录并生成默认配置
         std::filesystem::create_directories(std::filesystem::path(path_).parent_path());
-        std::ofstream out(path_);
-        out << defaultJson();
+        std::ofstream out(path_);   //向文件写入
+        out << defaultJson();   //生成默认配置
         out.close();
         LOG_WARN("config", "Configuration file missing. A default template was created at ", path_);
         config_ = buildDefaultConfig();
         return;
     }
 
+    // 文件存在，读取内容
     std::stringstream buffer;
-    buffer << in.rdbuf();
-    config_ = fromJson(buffer.str());
+    buffer << in.rdbuf();   //将app_config.json读到buffer
+    config_ = fromJson(buffer.str());   //将buffer读到的内容解析为config结构体
 
+    // 记录文件修改时间
     std::error_code ec;
     lastWriteTime_ = std::filesystem::last_write_time(path_, ec);
 }
 
+// 从 JSON 解析配置内容并返回聚合配置
 Configuration ConfigurationManager::fromJson(const std::string& jsonText) {
-    Configuration cfg = buildDefaultConfig();
+    Configuration cfg = buildDefaultConfig();   //初始化config
     try {
         auto json = nlohmann::json::parse(jsonText);
 
@@ -107,6 +114,7 @@ Configuration ConfigurationManager::fromJson(const std::string& jsonText) {
     return cfg;
 }
 
+// 生成默认json
 std::string ConfigurationManager::defaultJson() {
     nlohmann::json json{
         {"database",
@@ -138,7 +146,7 @@ std::string ConfigurationManager::defaultJson() {
           {"cacheSize", 120}}}
     };
 
-    return json.dump(4);
+    return json.dump(4);    //缩进4个空格
 }
 
 } // namespace core
