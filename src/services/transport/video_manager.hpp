@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <unordered_map>
 
-#include "HPSocket.h"  // 假设 HPSocket 已包含路径
+#include "hpsocket/HPSocket.h"  // HPSocket 库
 #include "core/logger.hpp"
 #include "monitoring/health_monitor.hpp"
 

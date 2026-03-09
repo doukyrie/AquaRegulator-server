@@ -62,7 +62,7 @@ inline std::string channelName(TelemetryChannel channel)
 }
 
 // TelemetryReading → JSON 序列化
-inline nlohmann::json toJson(const TelemetryReading& reading) 
+inline nlohmann::json toJson(const TelemetryReading& reading)
 {
     return nlohmann::json
     {
@@ -75,6 +75,21 @@ inline nlohmann::json toJson(const TelemetryReading& reading)
         {"gas", reading.gas},
         {"raindrop", reading.raindrop}
     };
+}
+
+// JSON → TelemetryReading 反序列化
+inline TelemetryReading fromJson(const nlohmann::json& json)
+{
+    TelemetryReading reading;
+    reading.label = json.value("label", "");
+    reading.timestamp = json.value("timestamp", "");
+    reading.temperature = json.value("temperature", 0.0);
+    reading.humidity = json.value("humidity", 0.0);
+    reading.light = json.value("light", 0.0);
+    reading.soil = json.value("soil", 0.0);
+    reading.gas = json.value("gas", 0.0);
+    reading.raindrop = json.value("raindrop", 0.0);
+    return reading;
 }
 
 // TelemetryFrame → JSON 序列化

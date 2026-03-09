@@ -7,7 +7,7 @@
 
 #include "core/configuration.hpp"
 #include "core/logger.hpp"
-#include "services/data_manager.hpp"
+#include "services/data_manager_redis.hpp"
 #include "monitoring/health_monitor.hpp"
 #include "infrastructure/sensors/sensor_data.hpp"
 #include "transport/sensor_data_settings.hpp"
@@ -85,8 +85,8 @@ int main() {
     }
 
     //启动遥测采集服务
-    //定期从数据库、modbus获取数据，存入缓存，通过publisher发布给客户端
-    TelemetryService telemetryService(config.pipeline, repository, sensorGateway, publisher, healthMonitor);
+    //定期从数据库、modbus获取数据，存入缓存（Redis 或内存），通过publisher发布给客户端
+    TelemetryServiceWithRedis telemetryService(config.pipeline, config.redis, repository, sensorGateway, publisher, healthMonitor);
     telemetryService.start();
 
     // 启动视频管理器

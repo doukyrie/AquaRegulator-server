@@ -52,6 +52,17 @@ struct PipelineConfig {
     uint16_t cacheSize = 120;   //// 缓存 120 条数据
 };
 
+// Redis 配置
+struct RedisConfig {
+    std::string host = "127.0.0.1";
+    uint16_t port = 6379;
+    std::string password = "";
+    uint16_t database = 0;
+    uint16_t poolSize = 10;         // 连接池大小
+    uint16_t timeoutMs = 3000;      // 超时时间（毫秒）
+    bool enabled = true;            // 是否启用 Redis
+};
+
 // 聚合所有配置
 struct Configuration {
     DatabaseConfig database;
@@ -60,6 +71,7 @@ struct Configuration {
     VideoConfig video;
     HealthConfig health;
     PipelineConfig pipeline;
+    RedisConfig redis;
 };
 
 // 配置管理器

@@ -59,7 +59,12 @@ cmake --build . -j    # 生成 build/AquaRegS
 
 ## 4. 运行
 ```bash
-./build/AquaRegS   # 仓库根目录执行
+# 方式 1：使用启动脚本（推荐）
+./run.sh
+
+# 方式 2：手动设置库路径
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/build:$(pwd)/src
+./build/src/AquaRegS
 ```
 - 日志：`logs/aqua_regulator.log`
 - 健康：`artifacts/health_status.json`（路径由配置决定）

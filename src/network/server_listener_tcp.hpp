@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HPSocket.h"
+#include "hpsocket/HPSocket.h"
 
 #include <algorithm>
 #include <functional>

@@ -31,5 +31,14 @@
         "realtimeSeconds": 5,
         "historicalSeconds": 60,
         "cacheSize": 120
+    },
+    "redis": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "password": "",
+        "database": 0,
+        "poolSize": 10,
+        "timeoutMs": 3000,
+        "enabled": true
     }
 }

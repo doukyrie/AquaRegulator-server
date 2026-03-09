@@ -108,6 +108,16 @@ Configuration ConfigurationManager::fromJson(const std::string& jsonText) {
             cfg.pipeline.cacheSize = it->value("cacheSize", cfg.pipeline.cacheSize);
         }
 
+        if (auto it = json.find("redis"); it != json.end()) {
+            cfg.redis.host = it->value("host", cfg.redis.host);
+            cfg.redis.port = it->value("port", cfg.redis.port);
+            cfg.redis.password = it->value("password", cfg.redis.password);
+            cfg.redis.database = it->value("database", cfg.redis.database);
+            cfg.redis.poolSize = it->value("poolSize", cfg.redis.poolSize);
+            cfg.redis.timeoutMs = it->value("timeoutMs", cfg.redis.timeoutMs);
+            cfg.redis.enabled = it->value("enabled", cfg.redis.enabled);
+        }
+
     } catch (const std::exception& ex) {
         LOG_ERROR("config", "Failed to parse configuration. Using defaults. Error: ", ex.what());
     }
@@ -143,7 +153,15 @@ std::string ConfigurationManager::defaultJson() {
         {"pipeline",
          {{"realtimeSeconds", 5},
           {"historicalSeconds", 60},
-          {"cacheSize", 120}}}
+          {"cacheSize", 120}}},
+        {"redis",
+         {{"host", "127.0.0.1"},
+          {"port", 6379},
+          {"password", ""},
+          {"database", 0},
+          {"poolSize", 10},
+          {"timeoutMs", 3000},
+          {"enabled", true}}}
     };
 
     return json.dump(4);    //缩进4个空格
