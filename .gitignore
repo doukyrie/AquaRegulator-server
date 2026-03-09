@@ -1,2 +1,4 @@
 build/
 3rdparty/
+logs/
+artifacts/
